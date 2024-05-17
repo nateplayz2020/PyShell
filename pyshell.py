@@ -1,6 +1,20 @@
-print("PyShell v1.0.0")
-print("Initializing variables...")
-calcsuccess = False
+# PyShell v1.0.1-alpha
+# Developed by Nathan Gonzalez / LanPort
+# Stockfish module required for chess capabilities.
+print("Importing time module...")
+import time
+chessprompt = input("Do you have the stockfish module installed [y/n/s]?")
+if chessprompt == "y":
+    print("Intializing Stockfish...")
+    from stockfish import Stockfish #type: ignore
+elif chessprompt == "n":
+    print("Go to https://pypi.org/project/stockfish/ to install stockfish.")
+    input("Press enter to continue startup..")
+elif chessprompt == "s":
+    print("You have skipped stockfish initialization.")
+else:
+    print("Invalid input; starting without chess capabilities.")
+    time.sleep(1)
 print("Importing run functionality...")
 from subprocess import call
 print("Importing RNG...")
@@ -9,8 +23,8 @@ print("Importing OS commands...")
 import os
 print("Setting booleans...")
 UsingProgram = True
-print("Importing time module...")
-import time
+calcsuccess = False
+UsingTermEmu = True
 print("Importing math module...")
 import math
 os.system('cls' if os.name == 'nt' else 'clear')
@@ -26,11 +40,14 @@ while UsingProgram == True:
         print("'calc': Basic calculator.")
         print("'explorer': Open Windows Explorer (Windows Only.)")
         print("'quit': End current pyshell session.")
-        print("'rolld20': Generates random number from 1-20 (Like a 20 side die!)")
-        print("'game': Semi-functional minigame")
+        print("'rolld20': Generates random number from 1-20. (Like a 20 side die!)")
+        print("'game': RNG based minigame.")
+        print("'run': Run a program. (OS Terminal Emulator reccomended for non-windows users.) ") # I have no idea if this is crossplatform or not... (Note)
+        print("'pdb': Enter the python debugger environment. (RECCOMENDED ONLY FOR DEVELOPERS)")
+        print("'os': Opens a OS terminal emulator")
     elif cmd == "clear":
         os.system('cls' if os.name == 'nt' else 'clear')
-    elif cmd == "calc":
+    elif cmd == "calc": # this originally just opened the calculator but i decided to build a full calculator (with bugs and everything!)
         os.system('cls' if os.name == 'nt' else 'clear')
         print("------CALCULATOR------")
         print("What type of equation do you want to make?")
@@ -57,6 +74,12 @@ while UsingProgram == True:
             print(calcres)
             calcsuccess = True
         elif eqtype == "4":
+            if x == 0:
+                print("NO.")
+                x = 1
+            elif y == 0:
+                print("NO.")
+                y = 1
             calcres = x / y
             print(calcres)
             calcsuccess = True
@@ -67,12 +90,12 @@ while UsingProgram == True:
             os.system('cls' if os.name == 'nt' else 'clear')
     elif cmd == "explorer":
         call(["explorer.exe"])
-    elif cmd == "fortnite":
-        print("PLACEHOLDER")
-    elif cmd == "rolld20":
+    elif cmd == "hello": # tiny little easteregg :)
+        print("Hello!")
+    elif cmd == "rolld20": # might actually make like a full on dnd companion thing but this is mainly for RNG testing :P
         roll = random.randint(1, 20)
         print("You rolled a ",roll,".")
-    elif cmd == "game":
+    elif cmd == "game": # 99% OF GAMBLERS QUIT RIGHT BEFORE THEY WIN!!!
         print("Let me explain the rules:")
         print("You pick a number and i pick a number.")
         print("If our numbers match you win!")
@@ -129,6 +152,18 @@ while UsingProgram == True:
             time.sleep(5)
     elif cmd == "quit":
         UsingProgram = False
+    elif cmd == "os":
+        print("OS Terminal Emulator")
+        print("Use 'quittermemu' to exit the terminal.")
+        while UsingTermEmu == True:
+            oscom = input("terminal-$")
+            if oscom == "quittermemu":
+                UsingTermEmu = False
+            else:
+                os.system(oscom)
+    elif cmd == "pdb":
+        print("Use 'continue' to exit the Python debug environment.")
+        breakpoint()
     else:
         print("Invalid Command. Commands MUST be lowercase. Use the 'help' command to view available commands.")
 print("Thank you for using pyshell; See you next time!")
